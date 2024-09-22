@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "899933306658",
+    "project_id": "digicare-26e18",
+    "storage_bucket": "digicare-26e18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899933306658:android:7f8d3e778488a00053ef7b",
+        "android_client_info": {
+          "package_name": "comp5216.sydney.edu.au.digicare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKQvPmn9c5aL2hrG0ZlxSjoSuRwMBmyf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
