@@ -57,15 +57,6 @@ fun SplashScreen(navController: NavController){
         Animatable(0f)
     }
     LaunchedEffect(key1 = true) {
-        scale.animateTo(
-            targetValue = 0.3f,
-            animationSpec = tween(
-                durationMillis = 500,
-                easing = {
-                    OvershootInterpolator(2f).getInterpolation(it)
-                }
-            )
-        )
         delay(3000L)
         navController.navigate("main_screen")
     }
