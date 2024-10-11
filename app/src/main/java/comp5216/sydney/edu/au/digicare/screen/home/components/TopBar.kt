@@ -1,4 +1,4 @@
-package comp5216.sydney.edu.au.digicare.ui.components
+package comp5216.sydney.edu.au.digicare.screen.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,7 +36,7 @@ import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
 
 @Preview
 @Composable
-fun ActionBar(
+fun TopBar(
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -56,7 +56,6 @@ fun ActionBar(
 
 @Composable
 private fun ProfileButton(
-    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = Modifier
@@ -71,7 +70,7 @@ private fun ProfileButton(
         Image(
             painter = painterResource(id = R.drawable.img_profile),
             contentDescription = null,
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .clip(CircleShape)
         )

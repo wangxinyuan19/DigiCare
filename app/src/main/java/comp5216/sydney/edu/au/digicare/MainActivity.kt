@@ -1,40 +1,72 @@
 package comp5216.sydney.edu.au.digicare
 
 import android.os.Bundle
-import android.view.animation.OvershootInterpolator
-import android.window.SplashScreen
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.estimateAnimationDurationMillis
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import comp5216.sydney.edu.au.digicare.ui.HomeScreen
-import kotlinx.coroutines.delay
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import comp5216.sydney.edu.au.digicare.screen.history.Summary
+import comp5216.sydney.edu.au.digicare.screen.home.HomeScreen
+import comp5216.sydney.edu.au.digicare.screen.profile.ProfileScreen
+import comp5216.sydney.edu.au.digicare.screen.splash.SplashScreen
+import comp5216.sydney.edu.au.digicare.screen.summary.DatePicker
 
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        auth = Firebase.auth
         enableEdgeToEdge()
         setContent {
             Navigation()
         }
     }
+
+    public override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+    }
+
+    private fun signInAnonymously() {
+        // [START signin_anonymously]
+        auth.signInAnonymously()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInAnonymously:success")
+                    val user = auth.currentUser
+                    //updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInAnonymously:failure", task.exception)
+                    Toast.makeText(
+                        baseContext,
+                        "Authentication failed.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                    //updateUI(null)
+
+                }
+            }
+        // [END signin_anonymously]
+    }
+
+    companion object {
+        private const val TAG = "AnonymousAuth"
+    }
+
 }
 
 @Composable
@@ -45,26 +77,9 @@ fun Navigation(){
             SplashScreen(navController = navController)
         }
         composable("main_screen"){
-            HomeScreen()
+            ProfileScreen()
         }
 
     }
 }
 
-@Composable
-fun SplashScreen(navController: NavController){
-    val scale = remember{
-        Animatable(0f)
-    }
-    LaunchedEffect(key1 = true) {
-        delay(3000L)
-        navController.navigate("main_screen")
-    }
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ){
-        Image(painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo")
-    }
-}

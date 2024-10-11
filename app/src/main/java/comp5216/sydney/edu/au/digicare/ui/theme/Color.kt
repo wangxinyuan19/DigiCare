@@ -39,9 +39,9 @@ val ColorGradient7 = Color(0xFF00FF00)
 val ColorGradient8 = Color(0xFF00CC00)
 val ColorGradient9 = Color(0xFF009900)
 
-val ColorGradient10 = Color(0x8000BFFF)
+val ColorGradient10 = Color(0xFF00BFFF)
 val ColorGradient11 = Color(0xFF0000FF)
-val ColorGradient12 = Color(0xFF0000FF)
+val ColorGradient12 = Color(0xff06164c)
 
 val ColorBackground = Color(0xFFF4DCF7).copy(alpha = 0.4f)
 val ColorSurface = Color.White
