@@ -1,4 +1,4 @@
-package comp5216.sydney.edu.au.digicare.screen.home.components
+package comp5216.sydney.edu.au.digicare.screen.home.ui_component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import comp5216.sydney.edu.au.digicare.R
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorGradient10
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorGradient11
@@ -34,10 +35,9 @@ import comp5216.sydney.edu.au.digicare.ui.theme.ColorGradient12
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
 
 
-@Preview
+//@Preview
 @Composable
-fun Features(
-) {
+fun Features(navController: NavController) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -69,7 +69,7 @@ fun Features(
                     )
                 Button(
                     onClick = {
-                        // Handle button click here
+                        navController.navigate("history")
                     },
                     modifier = Modifier
                         .padding(top = 16.dp)
@@ -114,7 +114,7 @@ fun Features(
                 )
                 Button(
                     onClick = {
-                        // Handle button click here
+                        navController.navigate("profile")
                     },
                     modifier = Modifier
                         .padding(top = 16.dp)
@@ -164,7 +164,7 @@ fun Features(
                 )
                 Button(
                     onClick = {
-                        // Handle button click here
+                        navController.navigate("summary")
                     },
                     modifier = Modifier
                         .padding(top = 16.dp)
@@ -209,7 +209,7 @@ fun Features(
                 )
                 Button(
                     onClick = {
-                        // Handle button click here
+                        navController.navigate("ai_doctor")
                     },
                     modifier = Modifier
                         .padding(top = 16.dp)

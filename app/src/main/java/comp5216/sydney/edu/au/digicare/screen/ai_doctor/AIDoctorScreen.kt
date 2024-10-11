@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -21,28 +23,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import comp5216.sydney.edu.au.digicare.R
-import comp5216.sydney.edu.au.digicare.screen.home.components.VoiceRecord
-import comp5216.sydney.edu.au.digicare.screen.summary.DatePicker
+import comp5216.sydney.edu.au.digicare.screen.ai_doctor.ui_component.ChatBox
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorBackground
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Summary() {
+fun AI_Doctor(navController: NavController) {
     Scaffold(
         containerColor = ColorBackground,
         bottomBar = {
             BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.fillMaxHeight(0.1f)
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable { },
+                        .clickable {navController.navigate("main_screen")},
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -94,14 +96,21 @@ fun Summary() {
                 }
             }
             Spacer(modifier = Modifier.padding(10.dp))
-            Box(
+            ChatBox()
+            Button(
+                onClick = {
+                    // Handle button click here
+                },
                 modifier = Modifier
-                    .padding(horizontal = 24.dp)
-            ){
-                VoiceRecord()
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.mic), // Replace with your image resource name
+                    contentDescription = "Button Image", // For accessibility
+                    modifier = Modifier.size(80.dp) // Set the image size
+                )
             }
-
-
         }
     }
 }

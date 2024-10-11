@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,29 +20,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import comp5216.sydney.edu.au.digicare.R
+import comp5216.sydney.edu.au.digicare.screen.history.ui_component.CardList
+import comp5216.sydney.edu.au.digicare.screen.history.ui_component.HistoryDialog
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorBackground
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScaffoldExample() {
-    val sampleItems = listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
+fun History(navController: NavController) {
 
+    val sampleItems = listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
+    val viewModel: HistoryViewModel = viewModel()
 
     Scaffold(
         containerColor = ColorBackground,
         bottomBar = {
             BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.fillMaxHeight(0.1f)
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable { },
+                        .clickable { navController.navigate("main_screen") },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -93,7 +99,11 @@ fun ScaffoldExample() {
                 }
 
             }
-            CardList(items = sampleItems)
+            CardList(items = sampleItems, viewModel)
+            if(viewModel.showDialog){
+                HistoryDialog(onDismiss = {viewModel.onCancelClick()},
+                    onDelete = {viewModel.onDeleteClick()})
+            }
         }
     }
 }

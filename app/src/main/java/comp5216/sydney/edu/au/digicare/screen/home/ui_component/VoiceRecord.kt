@@ -1,4 +1,4 @@
-package comp5216.sydney.edu.au.digicare.screen.home.components
+package comp5216.sydney.edu.au.digicare.screen.home.ui_component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

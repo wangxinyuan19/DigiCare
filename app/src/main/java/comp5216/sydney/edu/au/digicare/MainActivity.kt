@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,11 +14,13 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import comp5216.sydney.edu.au.digicare.screen.ai_doctor.AI_Doctor
+import comp5216.sydney.edu.au.digicare.screen.history.History
 import comp5216.sydney.edu.au.digicare.screen.history.Summary
 import comp5216.sydney.edu.au.digicare.screen.home.HomeScreen
 import comp5216.sydney.edu.au.digicare.screen.profile.ProfileScreen
 import comp5216.sydney.edu.au.digicare.screen.splash.SplashScreen
-import comp5216.sydney.edu.au.digicare.screen.summary.DatePicker
+import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -71,15 +74,29 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Navigation(){
+
     val navController = rememberNavController()
+
     NavHost(navController = navController, startDestination = "splash_screen" ){
         composable("splash_screen"){
             SplashScreen(navController = navController)
         }
         composable("main_screen"){
-            ProfileScreen()
+            HomeScreen(navController)
         }
-
+        composable("profile"){
+            ProfileScreen(navController)
+        }
+        composable("ai_doctor"){
+            AI_Doctor(navController)
+        }
+        composable("summary"){
+            Summary(navController)
+        }
+        composable("history"){
+            History(navController)
+        }
     }
 }
+
 

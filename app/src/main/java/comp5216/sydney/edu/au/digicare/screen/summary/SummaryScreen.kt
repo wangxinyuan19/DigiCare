@@ -4,11 +4,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,28 +23,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import comp5216.sydney.edu.au.digicare.R
-import comp5216.sydney.edu.au.digicare.screen.summary.DatePicker
+import comp5216.sydney.edu.au.digicare.screen.summary.ui_component.DatePicker
+import comp5216.sydney.edu.au.digicare.screen.summary.ui_component.GenerateDialog
+import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorBackground
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
-import java.util.Calendar
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 
-@Preview(showBackground = true)
-@OptIn(ExperimentalMaterial3Api::class)
+//@Preview(showBackground = true)
 @Composable
-fun Summary() {
+fun Summary(navController: NavController) {
+    val viewModel: SummaryViewModel = viewModel()
     Scaffold(
         containerColor = ColorBackground,
         bottomBar = {
             BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.fillMaxHeight(0.1f)
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable { },
+                        .clickable {navController.navigate("main_screen")},
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -91,7 +98,31 @@ fun Summary() {
                     )
                 }
             }
+            Spacer(modifier = Modifier.fillMaxHeight(0.1f))
             DatePicker()
+            Spacer(modifier = Modifier.fillMaxHeight(0.3f))
+            Button(
+                onClick = {viewModel.onGenerateClick()},
+                shape = CircleShape,
+                modifier = Modifier
+                    .size(150.dp)
+                    .align(Alignment.CenterHorizontally)
+            ){
+                Text(
+                    text = "Generate",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = ColorTextSecondary,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center
+                )
+            }
+            if(viewModel.showDialog){
+                GenerateDialog(
+                    onDismiss = {viewModel.onCancelClick()},
+                    onConfirm = {viewModel.onSaveClick()}
+                    )
+            }
+
         }
     }
 }

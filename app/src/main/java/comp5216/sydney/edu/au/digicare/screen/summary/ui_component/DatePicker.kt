@@ -1,19 +1,16 @@
-package comp5216.sydney.edu.au.digicare.screen.summary
+package comp5216.sydney.edu.au.digicare.screen.summary.ui_component
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
 import java.util.*
 
 @Composable
@@ -40,7 +37,7 @@ fun DatePicker() {
 
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -73,23 +70,6 @@ fun DatePicker() {
                 text = endDate,
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.Black,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Spacer(modifier = Modifier.fillMaxHeight(0.3f))
-
-        Button(
-            onClick = { },
-            shape = CircleShape,
-            modifier = Modifier
-                .size(150.dp)
-        ){
-            Text(
-                text = "Generate",
-                style = MaterialTheme.typography.titleLarge,
-                color = ColorTextSecondary,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
             )
