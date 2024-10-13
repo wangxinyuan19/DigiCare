@@ -33,6 +33,7 @@ class ProfileViewModel : ViewModel() {
     fun onConfirmClick(email:String, password:String){
         //Handle sign up with email and password
 
+
         showSignUpDialog = false
 
     }

@@ -35,8 +35,7 @@ fun GenerateDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                     .verticalScroll(scrollState)
             ) {
                 Text(
-                    text = "Generated Summary..."
-                )
+                    text = "generatedSummary")
             }
         },
         confirmButton = {
