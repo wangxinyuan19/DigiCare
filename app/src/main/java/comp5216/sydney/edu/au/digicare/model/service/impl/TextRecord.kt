@@ -12,7 +12,7 @@ data class TextRecord(
 suspend fun storeTextRecord(userId: String, generatedText: String) {
     val db=FirebaseFirestore.getInstance()
 
-    //we store the text record with storing ID, the text and the timestamo
+    //we store the text record with storing id, the text and the timestamp
     val record=TextRecord(
         userId=userId,
         text=generatedText,
@@ -27,7 +27,7 @@ suspend fun storeTextRecord(userId: String, generatedText: String) {
 suspend fun getTextRecords(userId: String): List<TextRecord> {
     val db=FirebaseFirestore.getInstance()
 
-    //1uery firestore for records using user id
+    //query firestore for records using user id
     val result=db.collection("records")
         .whereEqualTo("userId", userId)
         .get()
