@@ -41,8 +41,8 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CardList(viewModel: HistoryViewModel) {
-    // Record the number of currently displayed entries, with a default display of 4.
-    var itemCount by remember { mutableStateOf(4) }
+    // Record the number of currently displayed entries, with a default display of 6.
+    var itemCount by remember { mutableStateOf(6) }
     val listState = rememberLazyListState() // Used to track the scroll state of the list.
 
     // Load more data when scrolling to the bottom of the list.
@@ -50,7 +50,7 @@ fun CardList(viewModel: HistoryViewModel) {
         snapshotFlow { listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size }
             .collect { visibleItems ->
                 if (visibleItems >= itemCount && itemCount < viewModel.voiceHistory.size) {
-                    itemCount += 4 // Load 3 entries each time.
+                    itemCount += 4 // Load 4 entries each time.
                 }
             }
     }
@@ -59,8 +59,8 @@ fun CardList(viewModel: HistoryViewModel) {
         state = listState, // Bind the list state
         modifier = Modifier
             .fillMaxWidth()
-            .height(300.dp)
-            .padding(16.dp)
+            .height(500.dp)
+            .padding(10.dp)
     ) {
         // Display only the current number of items
         itemsIndexed(viewModel.voiceHistory.take(itemCount)) { index, record ->
@@ -74,7 +74,7 @@ fun CardList(viewModel: HistoryViewModel) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 2.dp)
                     .clickable {
                         viewModel.onRecordClick()
                         viewModel.onCardClick(record["id"] as String)  // Assume the id is of String type
