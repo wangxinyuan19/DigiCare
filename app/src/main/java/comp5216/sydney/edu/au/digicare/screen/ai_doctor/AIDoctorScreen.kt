@@ -100,10 +100,13 @@ fun AI_Doctor(navController: NavController) {
             ChatBox(resultText = analysisResult)
             Button(
                 onClick = {
+
+                    //extract function to view model
                     coroutineScope.launch {
                         SpeechRecognitionService.startRecording(context) { recognizedText ->
                             if (recognizedText.isNotBlank()) {
-                                viewModel.sendToGemini(recognizedText + " Please give me a brief analysis of my condition, including possible symptoms and corresponding suggestions. Don't just tell me to go to the hospital to see a doctor", context)
+                                viewModel.sendToGemini(recognizedText + " Please give me a brief analysis of my condition, including possible " +
+                                        "symptoms and corresponding suggestions. Don't just tell me to go to the hospital to see a doctor", context)
                             }
                         }
                     }
@@ -166,6 +169,7 @@ fun ChatBox(resultText: String) {
     }
 }
 
+// move to view model
 class GeminiIntegrationViewModel : ViewModel() {
     private val geminiService = GeminiIntegrationService()
     private val _analysisResult = MutableStateFlow("")

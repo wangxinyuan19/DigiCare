@@ -73,11 +73,11 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("com.google.dagger:hilt-android:2.49")
 
-    implementation("com.microsoft.cognitiveservices.speech:client-sdk:1.40.0")
-    implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
-    implementation("com.google.guava:guava:31.0.1-android")
-    implementation("org.reactivestreams:reactive-streams:1.0.4")
-    implementation(libs.androidx.camera.view)
+    implementation(libs.client.sdk)
+    implementation(libs.generativeai)
+    implementation(libs.guava)
+    implementation(libs.reactive.streams)
+    //implementation(libs.androidx.camera.view)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -87,6 +87,8 @@ fun VoiceRecord() {
 
             Button(
                 onClick = {
+
+                    //extract function to viewmodel
                     if (!isRecording) {
                         if (ContextCompat.checkSelfPermission(
                                 context,
