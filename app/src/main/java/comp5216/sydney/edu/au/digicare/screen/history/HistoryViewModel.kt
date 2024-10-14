@@ -20,9 +20,11 @@ class HistoryViewModel : ViewModel() {
 
     //Method to fetch record from firestore using getTextRecords
 
-    fun fetchRecords(userId: String) {
+//    fun fetchRecords(userId: String) {
+    fun fetchRecords() {
         viewModelScope.launch {
-            records = getTextRecords(userId)  // Fetch record and update the state
+            //records = getTextRecords(userId)  // Fetch record and update the state
+            records = getTextRecords()
         }
     }
 
