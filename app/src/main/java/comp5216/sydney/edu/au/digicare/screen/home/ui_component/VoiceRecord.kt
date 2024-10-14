@@ -36,6 +36,8 @@ fun VoiceRecord() {
     var recognizedText by remember { mutableStateOf("") }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val db = FirebaseFirestore.getInstance()
+
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -85,38 +87,68 @@ fun VoiceRecord() {
                 textAlign = TextAlign.Center
             )
 
-            Button(
-                onClick = {
-                    if (!isRecording) {
-                        if (ContextCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.RECORD_AUDIO
-                            ) == PackageManager.PERMISSION_GRANTED
-                        ) {
-                            coroutineScope.launch {
-                                SpeechRecognitionService.startRecording(context) { result ->
-                                    recognizedText = result
-                                    isRecording = false
-                                    Toast.makeText(context, "Recognized: $recognizedText", Toast.LENGTH_SHORT).show() // Debug message
-                                }
-                            }
-                        } else {
-                            launcher.launch(Manifest.permission.RECORD_AUDIO)
-                        }
-                        isRecording = true
-                    }
-                },
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = { offset ->
+
+                                if (!isRecording) {
+                                    if (ContextCompat.checkSelfPermission(
+                                            context,
+                                            Manifest.permission.RECORD_AUDIO
+                                        ) == PackageManager.PERMISSION_GRANTED
+                                    ) {
+                                        coroutineScope.launch {
+                                            isRecording = true
+                                            Toast.makeText(context, "Recording started", Toast.LENGTH_SHORT).show()
+                                            SpeechRecognitionService.startRecording(context) { result ->
+                                                recognizedText = result
+                                                isRecording = false
+//                                                onResult(result)
+                                                // Store the result into Firestore
+                                                val historyRecord = hashMapOf(
+                                                    "text" to recognizedText,
+                                                    "timestamp" to System.currentTimeMillis()
+                                                )
+
+                                                db.collection("voiceHistory")
+                                                    .add(historyRecord)
+                                                    .addOnSuccessListener {
+                                                        Toast.makeText(context, "Record saved successfully", Toast.LENGTH_SHORT).show()
+                                                    }
+                                                    .addOnFailureListener { e ->
+                                                        Log.d("addOnFailureListener e :" , "Error saving record: $e")
+                                                        println("Error saving record: $e")
+                                                        Toast.makeText(context, "Error saving record: $e", Toast.LENGTH_SHORT).show()
+
+                                                    }
+                                                Toast.makeText(context, "Recognized: $recognizedText", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    } else {
+                                        launcher.launch(Manifest.permission.RECORD_AUDIO)
+                                    }
+                                }
+                                tryAwaitRelease()
+
+                                if (isRecording) {
+                                    isRecording = false
+                                    Toast.makeText(context, "Recording stopped", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        )
+                    }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.mic),
-                    contentDescription = "Button Image",
+                    contentDescription = "Mic Button",
                     modifier = Modifier.size(80.dp)
                 )
             }
-
             if (recognizedText.isNotEmpty()) {
                 Text(
                     text = "Recognized Text: $recognizedText",
@@ -127,3 +159,4 @@ fun VoiceRecord() {
         }
     }
 }
+
