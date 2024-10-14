@@ -13,6 +13,7 @@ interface AccountService {
     suspend fun updateDisplayName(newDisplayName: String)
     suspend fun linkAccount(email: String, password: String)
     suspend fun signIn(email: String, password: String)
+    suspend fun signUp(email: String, password: String)
     suspend fun signOut()
     suspend fun deleteAccount()
 }
