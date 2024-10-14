@@ -108,7 +108,6 @@ fun VoiceRecord() {
                                             SpeechRecognitionService.startRecording(context) { result ->
                                                 recognizedText = result
                                                 isRecording = false
-//                                                onResult(result)
                                                 // Store the result into Firestore
                                                 val historyRecord = hashMapOf(
                                                     "text" to recognizedText,
