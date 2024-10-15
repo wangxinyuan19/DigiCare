@@ -37,15 +37,15 @@ class HistoryViewModel : ViewModel() {
     fun onDeleteClick(recordId: String) {
         showDialog = false
 
-        // Delete the selected record
+        //Delete the selected record
         db.collection("voiceHistory").document(recordId)
             .delete()
             .addOnSuccessListener {
-                // After successfully deleting the record, update the local state
+                //After successfully deleting the record, update the local state
                 voiceHistory.removeAll { it["id"] == recordId }
             }
             .addOnFailureListener {
-                // Error handling
+                //Error handling
             }
     }
 
@@ -55,13 +55,13 @@ class HistoryViewModel : ViewModel() {
             db.collection("voiceHistory")
                 .get()
                 .addOnSuccessListener { documents ->
-                    // Clear the previous history records
+                    //Clear the previous history records
                     voiceHistory.clear()
 
                     for (document in documents) {
                         val data = document.data
-                        data["id"] = document.id // Save the document ID for subsequent deletion
-                        voiceHistory.add(data) // Add the record to the list
+                        data["id"] = document.id //Save the document ID for subsequent deletion
+                        voiceHistory.add(data) //Add the record to the list
                     }
                     Log.d("VoiceHistory",voiceHistory.size.toString())
                 }
