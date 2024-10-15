@@ -3,6 +3,7 @@ package comp5216.sydney.edu.au.digicare.model.service
 import android.content.Context
 import android.widget.Toast
 import com.microsoft.cognitiveservices.speech.*
+import comp5216.sydney.edu.au.digicare.model.service.impl.storeTextRecord
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -29,6 +30,7 @@ object SpeechRecognitionService {
                         ResultReason.RecognizedSpeech -> {
                             onResult(result.text)
                             Toast.makeText(context, "Recognition success", Toast.LENGTH_SHORT).show()
+                            storeTextRecord(generatedText = result.text)
                         }
                         ResultReason.NoMatch -> {
                             onResult("No speech recognized")
