@@ -32,11 +32,14 @@ import comp5216.sydney.edu.au.digicare.ui.theme.ColorBackground
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 
 //@Preview(showBackground = true)
 @Composable
 fun Summary(navController: NavController) {
     val viewModel: SummaryViewModel = viewModel()
+    val context = LocalContext.current  // Get the current context
     Scaffold(
         containerColor = ColorBackground,
         bottomBar = {
@@ -102,7 +105,7 @@ fun Summary(navController: NavController) {
             DatePicker()
             Spacer(modifier = Modifier.fillMaxHeight(0.3f))
             Button(
-                onClick = {viewModel.onGenerateClick()},
+                onClick = {viewModel.onGenerateClick(context)},
                 shape = CircleShape,
                 modifier = Modifier
                     .size(150.dp)
@@ -118,6 +121,7 @@ fun Summary(navController: NavController) {
             }
             if(viewModel.showDialog){
                 GenerateDialog(
+                    viewModel = viewModel,
                     onDismiss = {viewModel.onCancelClick()},
                     onConfirm = {viewModel.onSaveClick()}
                     )
