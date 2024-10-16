@@ -32,11 +32,16 @@ import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
 //@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+//fun History(navController: NavController, userId:String) {
 fun History(navController: NavController) {
 
-    val sampleItems = listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
+
+    //val sampleItems = listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
     val viewModel: HistoryViewModel = viewModel()
 
+    //using fetchRecords() to load records from the Firestore, we pass userId for it
+//    viewModel.fetchRecords(userId)
+    viewModel.fetchRecords();
     Scaffold(
         containerColor = ColorBackground,
         bottomBar = {
@@ -99,7 +104,7 @@ fun History(navController: NavController) {
                 }
 
             }
-            CardList(items = sampleItems, viewModel)
+            CardList(items = viewModel.records.map { it.text }, viewModel)
             if(viewModel.showDialog){
                 HistoryDialog(onDismiss = {viewModel.onCancelClick()},
                     onDelete = {viewModel.onDeleteClick()})
