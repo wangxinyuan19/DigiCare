@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import comp5216.sydney.edu.au.digicare.screen.ai_doctor.AI_Doctor
 import comp5216.sydney.edu.au.digicare.screen.history.History
 import comp5216.sydney.edu.au.digicare.screen.history.Summary
@@ -26,11 +27,14 @@ import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
 class MainActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore  // Initialize Firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Initialize Firebase Auth and Firestore
         auth = Firebase.auth
+        firestore = FirebaseFirestore.getInstance()
         enableEdgeToEdge()
         setContent {
             Navigation()

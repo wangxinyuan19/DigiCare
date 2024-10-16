@@ -12,14 +12,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import java.util.*
+import androidx.lifecycle.viewmodel.compose.viewModel
+import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
 
 @Composable
-fun DatePicker() {
+fun DatePicker(viewModel: SummaryViewModel = viewModel()) {
     val context = LocalContext.current
 
-    // State variables to store selected dates
-    var startDate by remember { mutableStateOf("Start Date") }
-    var endDate by remember { mutableStateOf("End Date") }
+    // Get the start and end date from the view model
+    var startDate by remember { mutableStateOf(viewModel.startDate) }
+    var endDate by remember { mutableStateOf(viewModel.endDate) }
 
     // Function to show the DatePickerDialog
     val showDatePicker = { onDateSelected: (Int, Int, Int) -> Unit ->
@@ -44,10 +46,12 @@ fun DatePicker() {
         // Start Date Button
         Button(onClick = {
             showDatePicker { year, month, day ->
-                startDate = "$day/$month/$year"}
+                startDate = "$day/$month/$year"
+                viewModel.updateStartDate(startDate) // Update in the ViewModel
+            }
         },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFBBDEFB))
-        ){
+        ) {
             Text(
                 text = startDate,
                 style = MaterialTheme.typography.titleLarge,
@@ -62,10 +66,12 @@ fun DatePicker() {
         // End Date Button
         Button(onClick = {
             showDatePicker { year, month, day ->
-                endDate = "$day/$month/$year"}
+                endDate = "$day/$month/$year"
+                viewModel.updateEndDate(endDate) // Update in the ViewModel
+            }
         },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFBBDEFB))
-        ){
+        ) {
             Text(
                 text = endDate,
                 style = MaterialTheme.typography.titleLarge,
