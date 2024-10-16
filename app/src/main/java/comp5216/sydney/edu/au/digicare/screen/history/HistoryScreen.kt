@@ -35,6 +35,7 @@ import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
 @SuppressLint("NewApi")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+//fun History(navController: NavController, userId:String) {
 fun History(navController: NavController) {
 
     val viewModel: HistoryViewModel = viewModel()
@@ -43,7 +44,6 @@ fun History(navController: NavController) {
     LaunchedEffect(Unit) {
         viewModel.fetchVoiceHistory()
     }
-
     Scaffold(
         containerColor = ColorBackground,
         bottomBar = {
@@ -113,6 +113,7 @@ fun History(navController: NavController) {
                     onDismiss = { viewModel.onCancelClick() },
                     onDelete = {  viewModel.onDeleteClick(viewModel.currentId)  }
                 )
+
             }
         }
     }

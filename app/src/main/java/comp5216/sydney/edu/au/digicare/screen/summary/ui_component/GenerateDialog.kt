@@ -8,9 +8,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
 
 @Composable
-fun GenerateDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
+fun GenerateDialog(viewModel: SummaryViewModel, onDismiss: () -> Unit, onConfirm: () -> Unit) {
     // State to control the visibility of the dialog
     val scrollState = rememberScrollState()
 
@@ -35,7 +36,7 @@ fun GenerateDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                     .verticalScroll(scrollState)
             ) {
                 Text(
-                    text = "Generated Summary..."
+                    text = viewModel.summaryText // Display the generated summary
                 )
             }
         },
@@ -51,4 +52,3 @@ fun GenerateDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
         }
     )
 }
-
