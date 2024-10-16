@@ -1,6 +1,6 @@
 package comp5216.sydney.edu.au.digicare.screen.history.ui_component
 
-import HistoryViewModel
+import comp5216.sydney.edu.au.digicare.screen.history.HistoryViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
