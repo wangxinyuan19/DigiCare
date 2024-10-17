@@ -78,6 +78,7 @@ dependencies {
     implementation("com.google.guava:guava:31.0.1-android")
     implementation("org.reactivestreams:reactive-streams:1.0.4")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("androidx.work:work-runtime-ktx:2.7.1" ) //
     //implementation(libs.androidx.camera.view)
 
     testImplementation(libs.junit)

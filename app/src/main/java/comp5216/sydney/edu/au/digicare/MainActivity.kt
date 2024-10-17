@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -23,6 +25,8 @@ import comp5216.sydney.edu.au.digicare.screen.profile.ProfileScreen
 import comp5216.sydney.edu.au.digicare.screen.splash.SplashScreen
 import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
 import comp5216.sydney.edu.au.digicare.util.AppPermission
+import comp5216.sydney.edu.au.digicare.util.LocationWorker
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : ComponentActivity() {
@@ -58,6 +62,10 @@ class MainActivity : ComponentActivity() {
         appPermissions = AppPermission()
 
         requestLocationPermissionIfNeeded()
+        val locationWorkRequest = PeriodicWorkRequestBuilder<LocationWorker>(6, TimeUnit.HOURS)
+            .build()
+
+        WorkManager.getInstance(this).enqueue(locationWorkRequest)
 
 
 
