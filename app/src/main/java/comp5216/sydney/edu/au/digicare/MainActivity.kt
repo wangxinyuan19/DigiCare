@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,12 +22,32 @@ import comp5216.sydney.edu.au.digicare.screen.home.HomeScreen
 import comp5216.sydney.edu.au.digicare.screen.profile.ProfileScreen
 import comp5216.sydney.edu.au.digicare.screen.splash.SplashScreen
 import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
+import comp5216.sydney.edu.au.digicare.util.AppPermission
 
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore  // Initialize Firestore
+    private lateinit var appPermissions: AppPermission
+
+    private val requestLocationPermissionsLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions[android.Manifest.permission.ACCESS_FINE_LOCATION] == true -> {
+                Log.d(TAG, "Fine location permission granted")
+            }
+            permissions[android.Manifest.permission.ACCESS_COARSE_LOCATION] == true -> {
+                Log.d(TAG, "Coarse location permission granted")
+            }
+            else -> {
+                Log.d(TAG, "Location permission denied")
+                Toast.makeText(this, "Location permission is required to use this feature", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +55,33 @@ class MainActivity : ComponentActivity() {
         // Initialize Firebase Auth and Firestore
         auth = Firebase.auth
         firestore = FirebaseFirestore.getInstance()
+        appPermissions = AppPermission()
+
+        requestLocationPermissionIfNeeded()
+
+
+
         enableEdgeToEdge()
         setContent {
             Navigation()
         }
     }
+
+    private fun requestLocationPermissionIfNeeded() {
+        if (appPermissions.isLocationOk(this)) {
+            // Permission is already granted, proceed with location-based tasks
+            Log.d(TAG, "Location permission already granted")
+        } else {
+            requestLocationPermissionsLauncher.launch(
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
+
 
     public override fun onStart() {
         super.onStart()
@@ -102,5 +144,3 @@ fun Navigation(){
         }
     }
 }
-
-

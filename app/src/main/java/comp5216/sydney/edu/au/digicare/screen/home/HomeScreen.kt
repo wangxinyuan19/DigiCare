@@ -8,16 +8,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import comp5216.sydney.edu.au.digicare.screen.home.ui_component.Features
 import comp5216.sydney.edu.au.digicare.screen.home.ui_component.TopBar
 import comp5216.sydney.edu.au.digicare.screen.home.ui_component.VoiceRecord
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorBackground
 
-//@Preview
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen(navController = rememberNavController())  // Provide a default NavController for preview
+}
+
 @Composable
 fun HomeScreen(navController: NavController) {
+    val context = LocalContext.current
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = ColorBackground

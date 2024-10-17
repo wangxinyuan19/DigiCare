@@ -1,5 +1,6 @@
 package comp5216.sydney.edu.au.digicare.screen.home.ui_component
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,12 +36,37 @@ import comp5216.sydney.edu.au.digicare.ui.theme.ColorGradient3
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorSurface
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextPrimary
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import comp5216.sydney.edu.au.digicare.util.LocationService.LocationService
+import kotlinx.coroutines.launch
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun TopBarPreview() {
+    TopBar()
+}
 
 @Preview
 @Composable
 fun TopBar(
-    modifier: Modifier = Modifier
+    context: Context=LocalContext.current,
+    modifier:Modifier=Modifier
 ) {
+    var city by remember { mutableStateOf("Loading...") }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        val locationService=LocationService(context)
+        coroutineScope.launch {
+            locationService.getCurrentLocation{currentCity ->
+                city = currentCity
+            }
+        }
+    }
+
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top,
@@ -46,7 +74,7 @@ fun TopBar(
     ) {
         LocationInfo(
             modifier = Modifier.padding(top = 10.dp),
-            location = "Sydney"
+            location = city
         )
         ProfileButton()
     }

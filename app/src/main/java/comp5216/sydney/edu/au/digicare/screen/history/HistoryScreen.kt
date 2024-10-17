@@ -1,6 +1,5 @@
 package comp5216.sydney.edu.au.digicare.screen.history
 
-import HistoryViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

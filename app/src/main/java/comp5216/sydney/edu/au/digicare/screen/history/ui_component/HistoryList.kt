@@ -1,6 +1,5 @@
 package comp5216.sydney.edu.au.digicare.screen.history.ui_component
 
-import HistoryViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
@@ -33,6 +32,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import comp5216.sydney.edu.au.digicare.screen.history.HistoryViewModel
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
