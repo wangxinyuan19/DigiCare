@@ -3,37 +3,49 @@ package comp5216.sydney.edu.au.digicare.screen.summary
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import comp5216.sydney.edu.au.digicare.model.service.GeminiIntegrationService
 import android.content.Context
+import comp5216.sydney.edu.au.digicare.model.service.AccountService
+import comp5216.sydney.edu.au.digicare.model.service.StorageService
+import comp5216.sydney.edu.au.digicare.screen.DigiCareViewModel
+import comp5216.sydney.edu.au.digicare.util.combineRecords
+import comp5216.sydney.edu.au.digicare.util.convertDateToLong
+import comp5216.sydney.edu.au.digicare.util.convertLongToDateTime
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class SummaryViewModel : ViewModel() {
+@HiltViewModel
+class SummaryViewModel @Inject constructor(
+    private val accountService: AccountService,
+    private val storageService: StorageService
+) : DigiCareViewModel() {
 
     var showDialog by mutableStateOf(false)
         private set
 
-    var summaryText by mutableStateOf("Generated summary...")  // Hold the summary text
+    val _analysisResult = MutableStateFlow("")
+    val analysisResult: StateFlow<String> = _analysisResult
     var startDate by mutableStateOf("Start Date")
     var endDate by mutableStateOf("End Date")
 
 
     fun onGenerateClick(context: Context){
         showDialog = true
-        viewModelScope.launch {
-            delay(4000) // Simulate a 4-second delay for fetching data
-            // Call the service function to get the summary from the database
-            val fetchedRecord = fetchSummaryFromService(startDate, endDate) // Simulated service call
-            val geminiService = GeminiIntegrationService()
-            geminiService.sendToGemini(fetchedRecord, context, object : GeminiIntegrationService.GeminiCallback {
+        launchCatching {
+            val records =
+                storageService.fetchRecords(startDate,
+                    endDate, accountService.currentUserId)
+            val combinedRecords = combineRecords(records)
+            GeminiIntegrationService().sendToGemini(combinedRecords, context, object :
+                GeminiIntegrationService.GeminiCallback {
                 override fun onSuccess(result: String) {
-                    val fetchedSummary = result
-                    summaryText = fetchedSummary // Update the summary text
+                    _analysisResult.value = result
                 }
+
                 override fun onFailure(error: String) {
-                    println("Error fetching record: $error")
+                    _analysisResult.value = error
                 }
             })
         }
@@ -55,28 +67,5 @@ class SummaryViewModel : ViewModel() {
 
     fun updateEndDate(date: String) {
         endDate = date
-    }
-
-    // Simulate the service call to fetch the summary
-    private fun fetchSummaryFromService(startDate: String, endDate: String): String {
-        // Assume this gets the data from the database based on the date range
-        return "Summary from $startDate to $endDate:\n\nRecord 1: I got a flu\nRecord 2: I got a cancer\n..."
-    }
-
-    // Simulate saving the summary to the database
-    // Save the text to pdf
-    private fun saveSummaryToDatabase(summary: String) {
-        // Implementation to save summary to the database
-        // Save the summary data to the "summaries" collection in Firestore
-//        db.collection("summaries")
-//            .add(summaryData)
-//            .addOnSuccessListener { documentReference ->
-//                // Handle success (e.g., show a confirmation message)
-//                println("Summary saved with ID: ${documentReference.id}")
-//            }
-//            .addOnFailureListener { e ->
-//                // Handle failure (e.g., show an error message)
-//                println("Error saving summary: $e")
-//            }
     }
 }

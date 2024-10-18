@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -127,10 +129,11 @@ fun AI_Doctor(navController: NavController) {
 
 @Composable
 fun ChatBox(resultText: String) {
+    val scrollState = rememberScrollState()
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.7f)
+            .fillMaxHeight(0.8f)
             .padding(16.dp),
         verticalAlignment = Alignment.Top
     ) {
@@ -151,6 +154,7 @@ fun ChatBox(resultText: String) {
                 modifier = Modifier
                     .padding(16.dp)
                     .wrapContentWidth()
+                    .verticalScroll(scrollState)
             ) {
                 Text(
                     text = "AI Doctor",

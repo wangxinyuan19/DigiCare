@@ -31,12 +31,12 @@ fun ChatBox() {
     ) {
         // Icon on the left
         Image(
-            painter = painterResource(id = R.drawable.ai_doctor), // Replace with your icon resource
+            painter = painterResource(id = R.drawable.ai_doctor),
             contentDescription = "AI Robot",
             modifier = Modifier.size(60.dp)
         )
 
-        Spacer(modifier = Modifier.width(16.dp)) // Add spacing between icon and chat dialog
+        Spacer(modifier = Modifier.width(16.dp))
 
         // Chat Dialog on the right
         Card(
@@ -66,10 +66,4 @@ fun ChatBox() {
             }
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun PreviewIconWithChatDialog() {
-    ChatBox()
 }
