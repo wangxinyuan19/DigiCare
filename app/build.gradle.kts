@@ -80,6 +80,7 @@ dependencies {
     implementation("com.google.guava:guava:31.0.1-android")
     implementation("org.reactivestreams:reactive-streams:1.0.4")
     implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
     testImplementation(libs.junit)

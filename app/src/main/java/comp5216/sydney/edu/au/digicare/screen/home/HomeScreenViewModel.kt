@@ -60,4 +60,9 @@ class VoiceRecordViewModel @Inject constructor(
             storageService.createRecord(recognizedText, System.currentTimeMillis())
         }
     }
+    override fun onCleared() {
+        super.onCleared()
+        // Release SpeechRecognitionService resources
+        SpeechRecognitionService.releaseResources()
+    }
 }
