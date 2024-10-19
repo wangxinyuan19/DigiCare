@@ -20,6 +20,7 @@ import comp5216.sydney.edu.au.digicare.screen.history.Summary
 import comp5216.sydney.edu.au.digicare.screen.home.HomeScreen
 import comp5216.sydney.edu.au.digicare.screen.profile.ProfileScreen
 import comp5216.sydney.edu.au.digicare.screen.splash.SplashScreen
+import comp5216.sydney.edu.au.digicare.worker.BackgroundManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,6 +44,11 @@ class DigiCareActivity : ComponentActivity() {
     public override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
+        BackgroundManager.cancelTimeoutTask(this)
+    }
+    override fun onStop() {
+        super.onStop()
+        BackgroundManager.scheduleTimeoutTask(this)
     }
 
     private fun signInAnonymously() {
@@ -101,5 +107,7 @@ fun Navigation(){
         }
     }
 }
+
+
 
 
