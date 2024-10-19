@@ -108,7 +108,7 @@ fun AI_Doctor(navController: NavController) {
                         SpeechRecognitionService.startRecording(context) { recognizedText ->
                             if (recognizedText.isNotBlank()) {
                                 viewModel.sendToGemini(recognizedText + " Please give me a brief analysis of my condition, including possible " +
-                                        "symptoms and corresponding suggestions. Don't just tell me to go to the hospital to see a doctor", context)
+                                        "symptoms and corresponding suggestions.", context)
                             }
                         }
                     }
