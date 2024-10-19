@@ -48,6 +48,7 @@ class SummaryViewModel @Inject constructor(
                     _analysisResult.value = error
                 }
             })
+
         }
     }
 
