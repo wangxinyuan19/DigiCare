@@ -1,10 +1,14 @@
 package comp5216.sydney.edu.au.digicare.screen.history.ui_component
 
-import comp5216.sydney.edu.au.digicare.screen.history.HistoryViewModel
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,69 +34,68 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import comp5216.sydney.edu.au.digicare.screen.history.HistoryViewModel
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import androidx.compose.foundation.lazy.items
+import comp5216.sydney.edu.au.digicare.model.VoiceRecord
+import comp5216.sydney.edu.au.digicare.util.convertLongToDateTime
+import comp5216.sydney.edu.au.digicare.util.displayFirst50Characters
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun CardList(viewModel: HistoryViewModel) {
-    // Record the number of currently displayed entries, with a default display of 6.
-    var itemCount by remember { mutableStateOf(6) }
-    val listState = rememberLazyListState() // Used to track the scroll state of the list.
-
-    // Load more data when scrolling to the bottom of the list.
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size }
-            .collect { visibleItems ->
-                if (visibleItems >= itemCount && itemCount < viewModel.voiceHistory.size) {
-                    itemCount += 4 // Load 4 entries each time.
-                }
-            }
-    }
+    
+    val records = viewModel.records
 
     LazyColumn(
-        state = listState, // Bind the list state
         modifier = Modifier
             .fillMaxWidth()
-            .height(500.dp)
-            .padding(10.dp)
+            .clip(RoundedCornerShape(10.dp)),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp) // Space between cards
     ) {
-        // Display only the current number of items
-        itemsIndexed(viewModel.voiceHistory.take(itemCount)) { index, record ->
-            val text = record["text"] as? String ?: ""
-            val timestamp = record["timestamp"] as? Long ?: 0L
-
-            // Convert the timestamp to LocalDateTime and format it
-            val dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
-            val formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-
+        items(records) { record ->
             Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 2.dp)
-                    .clickable {
-                        viewModel.onRecordClick()
-                        viewModel.onCardClick(record["id"] as String)  // Assume the id is of String type
-                    }
+                    .fillMaxWidth() // Make the card take up the full width of the parent
+                    .height(150.dp), // Set the height of the card
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFBBDEFB)), // Light blue background
+                elevation = CardDefaults.cardElevation(4.dp) // Elevation for shadow effect
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = text,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                    Text(
-                        text = "Timestamp: $formattedDateTime",
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
+                // Content inside the card
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp) // Padding inside the card
+                        .clickable { viewModel.onRecordClick(record) }
+                ) {
+                    Column {
+                        Text(
+                            text = convertLongToDateTime(record.date),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = displayFirst50Characters(record.text),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Black
+                        )
+                    }
+
                 }
             }
         }
-
     }
 }
+
+
+

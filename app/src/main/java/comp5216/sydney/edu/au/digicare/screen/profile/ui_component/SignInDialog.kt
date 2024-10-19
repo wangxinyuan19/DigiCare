@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SignInDialog(
     onDismissRequest: () -> Unit,
-    onConfirmClick: (String, String) -> Unit
+    onSignInClick: (String, String) -> Unit
 ) {
     // State for storing email and password inputs
     var email by remember { mutableStateOf("") }
@@ -44,7 +44,7 @@ fun SignInDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    onConfirmClick(email, password)
+                    onSignInClick(email, password)
                     onDismissRequest() // Dismiss the dialog after confirming
                 }
             ) {
@@ -59,13 +59,3 @@ fun SignInDialog(
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewEmailPasswordDialog() {
-    SignInDialog(
-        onDismissRequest = { /* Handle dismiss */ },
-        onConfirmClick = { email, password ->
-            // Handle the email and password submission
-        }
-    )
-}

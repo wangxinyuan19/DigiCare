@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,10 +20,11 @@ import comp5216.sydney.edu.au.digicare.screen.history.Summary
 import comp5216.sydney.edu.au.digicare.screen.home.HomeScreen
 import comp5216.sydney.edu.au.digicare.screen.profile.ProfileScreen
 import comp5216.sydney.edu.au.digicare.screen.splash.SplashScreen
-import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
+import comp5216.sydney.edu.au.digicare.worker.BackgroundManager
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint
+class DigiCareActivity : ComponentActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore  // Initialize Firestore
@@ -44,6 +44,11 @@ class MainActivity : ComponentActivity() {
     public override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
+        BackgroundManager.cancelTimeoutTask(this)
+    }
+    override fun onStop() {
+        super.onStop()
+        BackgroundManager.scheduleTimeoutTask(this)
     }
 
     private fun signInAnonymously() {
@@ -102,5 +107,7 @@ fun Navigation(){
         }
     }
 }
+
+
 
 

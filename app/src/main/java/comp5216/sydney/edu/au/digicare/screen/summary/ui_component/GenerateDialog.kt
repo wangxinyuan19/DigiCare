@@ -14,6 +14,7 @@ import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
 fun GenerateDialog(viewModel: SummaryViewModel, onDismiss: () -> Unit, onConfirm: () -> Unit) {
     // State to control the visibility of the dialog
     val scrollState = rememberScrollState()
+    val analysisResult by viewModel.analysisResult.collectAsState()
 
     AlertDialog(
         onDismissRequest = {
@@ -36,7 +37,7 @@ fun GenerateDialog(viewModel: SummaryViewModel, onDismiss: () -> Unit, onConfirm
                     .verticalScroll(scrollState)
             ) {
                 Text(
-                    text = viewModel.summaryText // Display the generated summary
+                    text = analysisResult // Display the generated summary
                 )
             }
         },

@@ -29,6 +29,12 @@ class AccountServiceImpl @Inject constructor() : AccountService {
     override val currentUserId: String
         get() = Firebase.auth.currentUser?.uid.orEmpty()
 
+    override val currentUserEmail: String
+        get() = Firebase.auth.currentUser?.email.orEmpty()
+
+    override val isAnonymous: Boolean
+        get() = Firebase.auth.currentUser?.isAnonymous?: false
+
     override fun hasUser(): Boolean {
         return Firebase.auth.currentUser != null
     }
@@ -69,15 +75,10 @@ class AccountServiceImpl @Inject constructor() : AccountService {
         createAnonymousAccount()
     }
 
-    override suspend fun deleteAccount() {
-        Firebase.auth.currentUser!!.delete().await()
-    }
-
     private fun FirebaseUser?.toAppUser(): User {
         return if (this == null) User() else User(
             id = this.uid,
             email = this.email ?: "",
-            provider = this.providerId,
             displayName = this.displayName ?: "",
             isAnonymous = this.isAnonymous
         )

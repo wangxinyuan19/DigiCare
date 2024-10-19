@@ -8,12 +8,21 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import comp5216.sydney.edu.au.digicare.model.VoiceRecord
+import comp5216.sydney.edu.au.digicare.util.convertDateToLong
+import comp5216.sydney.edu.au.digicare.util.convertLongToDateTime
 
 @Composable
-fun HistoryDialog(onDismiss: () -> Unit, onDelete: () -> Unit) {
+fun HistoryDialog(
+    onDismiss: () -> Unit,
+    onDelete: () -> Unit,
+    record: VoiceRecord
+) {
 
     // State to control the visibility of the dialog
     val scrollState = rememberScrollState()
+    val date = convertLongToDateTime(record.date)
+    val text = record.text
 
     AlertDialog(
         onDismissRequest = {
@@ -21,7 +30,7 @@ fun HistoryDialog(onDismiss: () -> Unit, onDelete: () -> Unit) {
         },
         title = {
             Text(
-                text = "Record #1",
+                text = "Record",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Medium
             )
@@ -35,7 +44,14 @@ fun HistoryDialog(onDismiss: () -> Unit, onDelete: () -> Unit) {
                     .verticalScroll(scrollState)
             ) {
                 Text(
-                    text = "Date (e.g. 11/10/2024)"
+                    text = date,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(modifier = Modifier.padding(10.dp))
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
         },

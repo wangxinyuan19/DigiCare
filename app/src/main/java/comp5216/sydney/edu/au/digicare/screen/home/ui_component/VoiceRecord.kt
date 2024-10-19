@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import comp5216.sydney.edu.au.digicare.R
 import comp5216.sydney.edu.au.digicare.ui.theme.ColorGradient1
@@ -35,40 +37,16 @@ import comp5216.sydney.edu.au.digicare.model.service.SpeechRecognitionService
 import kotlinx.coroutines.launch
 
 @Composable
-fun VoiceRecord() {
-    var isRecording by remember { mutableStateOf(false) }
-    var recognizedText by remember { mutableStateOf("") }
+fun VoiceRecord(viewModel: VoiceRecordViewModel = hiltViewModel()) {
+    val isRecording by viewModel.isRecording
+    val recognizedText by viewModel.recognizedText
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    val db = FirebaseFirestore.getInstance()
-
-//    // Store the default data when the component is initially loaded
-//    LaunchedEffect(Unit) {
-//        val historyRecord = hashMapOf(
-//            "text" to "66666",  // 默认数据
-//            "timestamp" to System.currentTimeMillis()
-//        )
-//
-//        db.collection("voiceHistory")
-//            .add(historyRecord)
-//            .addOnSuccessListener {
-//                Toast.makeText(context, "Default record saved successfully", Toast.LENGTH_SHORT).show()
-//            }
-//            .addOnFailureListener { e ->
-//                Toast.makeText(context, "Error saving default record: $e", Toast.LENGTH_SHORT).show()
-//            }
-//    }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { granted ->
             if (granted) {
-                coroutineScope.launch {
-                    SpeechRecognitionService.startRecording(context) { result ->
-                        recognizedText = result
-                        isRecording = false
-                    }
-                }
+                viewModel.startRecording()
             } else {
                 Toast.makeText(context, "Microphone permission denied", Toast.LENGTH_SHORT).show()
             }
@@ -116,51 +94,20 @@ fun VoiceRecord() {
                         detectTapGestures(
                             onPress = {
                                 if (!isRecording) {
-                                    if (ContextCompat.checkSelfPermission(
-                                            context,
-                                            Manifest.permission.RECORD_AUDIO
-                                        ) == PackageManager.PERMISSION_GRANTED
-                                    ) {
-                                        isRecording = true
-                                        coroutineScope.launch {
-                                            if (!isRecording)
-                                                Toast.makeText(context, "Recording started", Toast.LENGTH_SHORT).show()
-
-                                            // 启动录音
-                                            SpeechRecognitionService.startRecording(context) { result ->
-                                                recognizedText = result
-                                                isRecording = false
-
-
-                                                val historyRecord = hashMapOf(
-                                                    "text" to recognizedText,
-                                                    "timestamp" to System.currentTimeMillis()
-                                                )
-
-                                                db.collection("voiceHistory")
-                                                    .add(historyRecord)
-                                                    .addOnSuccessListener {
-                                                        Toast.makeText(context, "Record saved successfully", Toast.LENGTH_SHORT).show()
-                                                    }
-                                                    .addOnFailureListener { e ->
-                                                        Log.d("addOnFailureListener e :", "Error saving record: $e")
-                                                        Toast.makeText(context, "Error saving record: $e", Toast.LENGTH_SHORT).show()
-                                                    }
-
-                                                Toast.makeText(context, "Recognized: $recognizedText", Toast.LENGTH_SHORT).show()
-                                            }
+                                    viewModel.requestMicrophonePermission { granted ->
+                                        if (granted) {
+                                            viewModel.startRecording()
+                                        } else {
+                                            launcher.launch(Manifest.permission.RECORD_AUDIO)
                                         }
-                                    } else {
-                                        launcher.launch(Manifest.permission.RECORD_AUDIO)
                                     }
                                 }
 
-
                                 val isReleased = tryAwaitRelease()
-
                                 if (isReleased && isRecording) {
-                                    isRecording = false
-                                    Toast.makeText(context, "Recording stopped", Toast.LENGTH_SHORT).show()
+                                    Toast
+                                        .makeText(context, "Recording stopped", Toast.LENGTH_SHORT)
+                                        .show()
                                 }
                             }
                         )
@@ -168,11 +115,10 @@ fun VoiceRecord() {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.mic),
-                    contentDescription = "Mic Button",
+                    contentDescription = "Button Image",
                     modifier = Modifier.size(80.dp)
                 )
             }
-
 
             if (recognizedText.isNotEmpty()) {
                 Text(

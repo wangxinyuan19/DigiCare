@@ -10,29 +10,40 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import comp5216.sydney.edu.au.digicare.model.service.impl.TextRecord
-import comp5216.sydney.edu.au.digicare.model.service.impl.getTextRecords
+import androidx.lifecycle.viewmodel.compose.viewModel
+import comp5216.sydney.edu.au.digicare.model.VoiceRecord
+import comp5216.sydney.edu.au.digicare.model.service.AccountService
+import comp5216.sydney.edu.au.digicare.model.service.StorageService
+import comp5216.sydney.edu.au.digicare.screen.DigiCareViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HistoryViewModel : ViewModel() {
+@HiltViewModel
+class HistoryViewModel @Inject constructor(
+    private val accountService: AccountService,
+    private val storageService: StorageService
+): DigiCareViewModel() {
 
     var showDialog by mutableStateOf(false)
         private set
 
+    var clickedRecord by mutableStateOf(VoiceRecord())
+        private set
 
-    var voiceHistory = mutableStateListOf<Map<String, Any>>() // Used to store history records
+    var records = mutableStateListOf<VoiceRecord>()
+        private set
 
-    private val db = FirebaseFirestore.getInstance() // Initialize Firestore instance
-
-    var currentId: String by mutableStateOf("")
-
-    fun onCardClick(id: String) {
-        currentId = id
-        showDialog = true
-
+    fun fetchRecordsForCurrentUser(){
+        launchCatching {
+            val fetchedRecords = storageService.fetchRecords(accountService.currentUserId)
+            records.clear()
+            records.addAll(fetchedRecords)
+        }
     }
 
-    fun onRecordClick(){
+    fun onRecordClick(record: VoiceRecord){
+        clickedRecord = record
         showDialog = true
     }
 
@@ -40,40 +51,13 @@ class HistoryViewModel : ViewModel() {
         showDialog = false
     }
 
-    fun onDeleteClick(recordId: String) {
+    fun onDeleteClick(record: VoiceRecord) {
+        launchCatching {
+            storageService.deleteRecord(record.id)
+        }
+        fetchRecordsForCurrentUser()
         showDialog = false
 
-        //Delete the selected record
-        db.collection("voiceHistory").document(recordId)
-            .delete()
-            .addOnSuccessListener {
-                //After successfully deleting the record, update the local state
-                voiceHistory.removeAll { it["id"] == recordId }
-            }
-            .addOnFailureListener {
-                //Error handling
-            }
     }
 
-    // Fetch Firestore history records
-    fun fetchVoiceHistory() {
-        viewModelScope.launch {
-            db.collection("voiceHistory")
-                .get()
-                .addOnSuccessListener { documents ->
-                    //Clear the previous history records
-                    voiceHistory.clear()
-
-                    for (document in documents) {
-                        val data = document.data
-                        data["id"] = document.id //Save the document ID for subsequent deletion
-                        voiceHistory.add(data) //Add the record to the list
-                    }
-                    Log.d("VoiceHistory",voiceHistory.size.toString())
-                }
-                .addOnFailureListener {
-                    // Error handling
-                }
-        }
-    }
 }

@@ -1,6 +1,6 @@
 package comp5216.sydney.edu.au.digicare.screen.history
 
-import comp5216.sydney.edu.au.digicare.screen.history.HistoryViewModel
+
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,6 +17,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import comp5216.sydney.edu.au.digicare.R
@@ -36,14 +39,13 @@ import comp5216.sydney.edu.au.digicare.ui.theme.ColorTextSecondary
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 //fun History(navController: NavController, userId:String) {
-fun History(navController: NavController) {
-
-    val viewModel: HistoryViewModel = viewModel()
+fun History(navController: NavController, viewModel: HistoryViewModel = hiltViewModel()) {
 
     // Ensure that data is fetched from Firestore when the page loads.
     LaunchedEffect(Unit) {
-        viewModel.fetchVoiceHistory()
+        viewModel.fetchRecordsForCurrentUser()
     }
+
     Scaffold(
         containerColor = ColorBackground,
         bottomBar = {
@@ -106,14 +108,14 @@ fun History(navController: NavController) {
                 }
             }
 
-            CardList(viewModel = viewModel)
+            CardList(viewModel)
 
             if (viewModel.showDialog) {
                 HistoryDialog(
                     onDismiss = { viewModel.onCancelClick() },
-                    onDelete = {  viewModel.onDeleteClick(viewModel.currentId)  }
+                    onDelete = { viewModel.onDeleteClick(viewModel.clickedRecord)},
+                    viewModel.clickedRecord
                 )
-
             }
         }
     }

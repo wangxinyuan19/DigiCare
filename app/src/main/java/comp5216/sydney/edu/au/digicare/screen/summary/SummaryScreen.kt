@@ -34,11 +34,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import android.content.Context
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 
 //@Preview(showBackground = true)
 @Composable
 fun Summary(navController: NavController) {
-    val viewModel: SummaryViewModel = viewModel()
+    val viewModel: SummaryViewModel = hiltViewModel()
     val context = LocalContext.current  // Get the current context
     Scaffold(
         containerColor = ColorBackground,

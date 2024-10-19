@@ -10,18 +10,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import comp5216.sydney.edu.au.digicare.R
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 
-
 @Composable
-fun SplashScreen(navController: NavController){
+fun SplashScreen(navController: NavController, viewModel: SplashViewModel = hiltViewModel()){
     val scale = remember{
         Animatable(0f)
     }
     LaunchedEffect(key1 = true) {
-        delay(3000L)
+        viewModel.onAppStart()
+        delay(2000L)
         navController.navigate("main_screen")
     }
     Box(
