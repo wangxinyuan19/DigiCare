@@ -40,7 +40,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun Summary(navController: NavController) {
     val viewModel: SummaryViewModel = hiltViewModel()
-    val context = LocalContext.current  // Get the current context
+    val context = LocalContext.current 
+
     Scaffold(
         containerColor = ColorBackground,
         bottomBar = {
@@ -51,7 +52,7 @@ fun Summary(navController: NavController) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable {navController.navigate("main_screen")},
+                        .clickable { navController.navigate("main_screen") },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -71,21 +72,18 @@ fun Summary(navController: NavController) {
                 .padding(paddings)
                 .padding(bottom = 10.dp)
         ) {
-            Box(){
+            Box {
                 Image(
                     painter = painterResource(id = R.drawable.top_background),
                     contentDescription = "top_background",
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 )
-                Column (
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                ){
+                Column(
+                    modifier = Modifier.align(Alignment.Center)
+                ) {
                     Text(
                         text = "Summary",
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.titleLarge,
                         color = ColorTextSecondary,
                         fontWeight = FontWeight.Medium,
@@ -93,8 +91,7 @@ fun Summary(navController: NavController) {
                     )
                     Text(
                         text = "Choose a period below to generate summary",
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.titleMedium,
                         color = ColorTextSecondary,
                         fontWeight = FontWeight.Medium,
@@ -102,16 +99,20 @@ fun Summary(navController: NavController) {
                     )
                 }
             }
-            Spacer(modifier = Modifier.fillMaxHeight(0.1f))
+
+            Spacer(modifier = Modifier.fillMaxHeight(0.05f))
+
             DatePicker()
-            Spacer(modifier = Modifier.fillMaxHeight(0.3f))
+
+            Spacer(modifier = Modifier.fillMaxHeight(0.05f))
+
             Button(
-                onClick = {viewModel.onGenerateClick(context)},
+                onClick = { viewModel.onGenerateClick(context) },
                 shape = CircleShape,
                 modifier = Modifier
                     .size(150.dp)
                     .align(Alignment.CenterHorizontally)
-            ){
+            ) {
                 Text(
                     text = "Generate",
                     style = MaterialTheme.typography.titleLarge,
@@ -120,14 +121,34 @@ fun Summary(navController: NavController) {
                     textAlign = TextAlign.Center
                 )
             }
-            if(viewModel.showDialog){
-                GenerateDialog(
-                    viewModel = viewModel,
-                    onDismiss = {viewModel.onCancelClick()},
-                    onConfirm = {viewModel.onSaveClick()}
-                    )
+
+            Spacer(modifier = Modifier.fillMaxHeight(0.1f))
+
+            Button(
+                onClick = { viewModel.onViewPdfClick(context) },
+                shape = CircleShape,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "View Saved Summary",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = ColorTextSecondary,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center
+                )
             }
 
+            Spacer(modifier = Modifier.fillMaxHeight(0.3f))
+
+            if (viewModel.showDialog) {
+                GenerateDialog(
+                    viewModel = viewModel,
+                    onDismiss = { viewModel.onCancelClick() },
+                    onSave = { viewModel.onSaveClick(context) }
+                )
+            }
         }
     }
 }
