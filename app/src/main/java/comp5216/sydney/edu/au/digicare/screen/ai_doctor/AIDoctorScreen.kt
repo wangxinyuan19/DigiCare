@@ -107,8 +107,10 @@ fun AI_Doctor(navController: NavController) {
                     coroutineScope.launch {
                         SpeechRecognitionService.startRecording(context) { recognizedText ->
                             if (recognizedText.isNotBlank()) {
-                                viewModel.sendToGemini(recognizedText + " Please give me a brief analysis of my condition, including possible " +
-                                        "symptoms and corresponding suggestions.", context)
+                                viewModel.sendToGemini(recognizedText + " what you need to reply.\n" +
+                                        "1. Symptom analysis\n" +
+                                        "2. Suggestions for me\n" +
+                                        "Do not include anything else in your reply", context)
                             }
                         }
                     }
