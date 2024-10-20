@@ -61,15 +61,15 @@ fun CardList(viewModel: HistoryViewModel) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp)),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp) // Space between cards
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(records) { record ->
             Card(
                 modifier = Modifier
-                    .fillMaxWidth() // Make the card take up the full width of the parent
-                    .height(150.dp), // Set the height of the card
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFBBDEFB)), // Light blue background
-                elevation = CardDefaults.cardElevation(4.dp) // Elevation for shadow effect
+                    .fillMaxWidth()
+                    .height(150.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFBBDEFB)),
+                elevation = CardDefaults.cardElevation(4.dp)
             ) {
                 // Content inside the card
                 Box(

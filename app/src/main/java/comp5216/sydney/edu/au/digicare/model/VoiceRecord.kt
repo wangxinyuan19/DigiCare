@@ -6,6 +6,7 @@ data class VoiceRecord(
     @DocumentId val id: String = "",
     val text: String = "",
     val userId: String = "",
-    val date: Long = 0L
+    val date: Long = 0L,
+//    val iv: String = ""
 )
 

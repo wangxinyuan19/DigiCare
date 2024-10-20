@@ -35,7 +35,7 @@ class ProfileViewModel @Inject constructor(
     init {
         launchCatching {
             currentUserFlow.collect{
-                user -> updateUserInfo(user)
+                user -> updateUserInfo()
             }
         }
     }
@@ -71,6 +71,7 @@ class ProfileViewModel @Inject constructor(
                 errorMessage = "password do not match"
             } else {
                 accountService.linkAccount(email, password1)
+                updateUserInfo()
                 showSignUpDialog = false // Close the dialog
             }
         }
@@ -84,7 +85,7 @@ class ProfileViewModel @Inject constructor(
 
     }
 
-    fun updateUserInfo(user: User?) {
+    fun updateUserInfo() {
         isAnonymous = accountService.isAnonymous
         userEmail = accountService.currentUserEmail
     }

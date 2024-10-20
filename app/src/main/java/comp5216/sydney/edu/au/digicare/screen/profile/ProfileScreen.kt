@@ -146,7 +146,7 @@ fun ProfileScreen(navController: NavController, viewModel : ProfileViewModel = h
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ){
-                        Text(text = viewModel.userEmail)
+                        Text(text = userEmail)
                     }
 
                 }

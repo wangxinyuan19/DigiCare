@@ -82,6 +82,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

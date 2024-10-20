@@ -19,7 +19,6 @@ fun SignUpDialog(
     var email by remember { mutableStateOf("") }
     var password1 by remember { mutableStateOf("") }
     var password2 by remember { mutableStateOf("") }
-    var message by remember {mutableStateOf("")}
 
     // Dialog for email and password input
     AlertDialog(
@@ -41,7 +40,7 @@ fun SignUpDialog(
                     onValueChange = { password1 = it },
                     label = { Text(text = "Password") },
                     modifier = Modifier.fillMaxWidth(),
-                    //visualTransformation = PasswordVisualTransformation() // For password input
+                    visualTransformation = PasswordVisualTransformation() // For password input
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
@@ -49,7 +48,7 @@ fun SignUpDialog(
                     onValueChange = { password2 = it },
                     label = { Text(text = "Confirm Password") },
                     modifier = Modifier.fillMaxWidth(),
-                    //visualTransformation = PasswordVisualTransformation() // For password input
+                    visualTransformation = PasswordVisualTransformation() // For password input
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
