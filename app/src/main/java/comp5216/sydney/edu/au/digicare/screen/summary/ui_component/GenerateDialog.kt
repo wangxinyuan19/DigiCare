@@ -11,15 +11,12 @@ import androidx.compose.ui.unit.dp
 import comp5216.sydney.edu.au.digicare.screen.summary.SummaryViewModel
 
 @Composable
-fun GenerateDialog(viewModel: SummaryViewModel, onDismiss: () -> Unit, onConfirm: () -> Unit) {
-    // State to control the visibility of the dialog
+fun GenerateDialog(viewModel: SummaryViewModel, onDismiss: () -> Unit, onSave: () -> Unit) {
     val scrollState = rememberScrollState()
     val analysisResult by viewModel.analysisResult.collectAsState()
 
     AlertDialog(
-        onDismissRequest = {
-            onDismiss()
-        },
+        onDismissRequest = { onDismiss() },
         title = {
             Text(
                 text = "Preview Summary",
@@ -28,7 +25,6 @@ fun GenerateDialog(viewModel: SummaryViewModel, onDismiss: () -> Unit, onConfirm
             )
         },
         text = {
-            // LazyColumn for better performance with long lists
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -36,13 +32,11 @@ fun GenerateDialog(viewModel: SummaryViewModel, onDismiss: () -> Unit, onConfirm
                     .padding(16.dp)
                     .verticalScroll(scrollState)
             ) {
-                Text(
-                    text = analysisResult // Display the generated summary
-                )
+                Text(text = analysisResult)
             }
         },
         confirmButton = {
-            Button(onClick = onConfirm) {
+            Button(onClick = onSave) {
                 Text("Save")
             }
         },
